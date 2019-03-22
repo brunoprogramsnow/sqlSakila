@@ -16,3 +16,14 @@ SELECT * FROM country WHERE country IN('Afghanistan','Bangladesh','China');
 ALTER TABLE actor ADD description BLOB;
 -- Delete the description column.
 ALTER TABLE actor DROP description;
+-- List the last names of actors, as well as how many actors have that last name.
+SELECT last_name, count(last_name) FROM actor GROUP BY last_name;
+-- List last names of actors and the number of actors who have that last name, but only for names that are shared by at least two actors.
+SELECT last_name, count(last_name) >= 2 FROM actor GROUP BY last_name;
+-- The actor HARPO WILLIAMS was accidentally entered in the actor table as GROUCHO WILLIAMS. Write a query to fix the record.
+UPDATE actor SET first_name ="HARPO" WHERE actor_id =172;
+-- first name of the actor is currently HARPO, change it to GROUCHO
+SET SQL_SAFE_UPDATES = 0;
+UPDATE actor a SET first_name ="GROUCHO" WHERE a.first_name ="HARPO";
+-- schema of the address table.
+SHOW CREATE TABLE address;
