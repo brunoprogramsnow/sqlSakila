@@ -27,3 +27,30 @@ SET SQL_SAFE_UPDATES = 0;
 UPDATE actor a SET first_name ="GROUCHO" WHERE a.first_name ="HARPO";
 -- schema of the address table.
 SHOW CREATE TABLE address;
+-- Use JOIN to display the first and last names, as well as the address, of each staff member. Use the tables staff and address
+SELECT s.first_name, s.last_name, a.address
+FROM staff s
+INNER JOIN address a ON
+s.address_id=a.address_id;
+--  Use JOIN to display the total amount rung up by each staff member in August of 2005. Use tables staff and payment
+SELECT s.first_name, s.last_name, p.amount, p.payment_date
+FROM payment p
+INNER JOIN staff s ON
+s.staff_id=p.staff_id
+WHERE p.payment_date BETWEEN '2005/08/01' AND '2005/08/31';
+-- **List each film and the number of actors who are listed for that film. Use tables film_actor and film. Use inner join.
+SELECT f.title, fa.actor_id
+FROM film f
+INNER JOIN film_actor fa ON
+f.film_id=fa.film_id;
+-- How many copies of the film Hunchback Impossible exist in the inventory system?
+SELECT f.title, count(i.inventory_id)
+FROM film f
+INNER JOIN inventory i ON
+f.film_id=i.film_id WHERE f.title ="Hunchback Impossible"
+-- Using the tables payment and customer and the JOIN command, list the total paid by each customer. List the customers alphabetically by last name
+SELECT c.first_name, c.last_name, sum(p.amount)
+FROM payment p
+INNER JOIN customer c ON
+c.customer_id=p.customer_id 
+GROUP BY c.first_name,c.last_name  ORDER BY c.last_name asc;
