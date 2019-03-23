@@ -95,7 +95,7 @@ INNER JOIN rental r ON r.rental_id = p.rental_id
 INNER JOIN inventory i ON r.inventory_id = i.inventory_id
 INNER JOIN film_category fc ON fc.film_id = i.film_id
 INNER JOIN category ca ON fc.category_id = ca.category_id
-GROUP BY ca.name ORDER BY sum(p.amount) DESC;
+GROUP BY ca.name ORDER BY sum(p.amount) DESC LIMIT 5;
 -- Use the solution from the problem above to create a view.
 CREATE VIEW genresByRevDesc AS
 SELECT sum(p.amount), ca.name
@@ -104,7 +104,7 @@ INNER JOIN rental r ON r.rental_id = p.rental_id
 INNER JOIN inventory i ON r.inventory_id = i.inventory_id
 INNER JOIN film_category fc ON fc.film_id = i.film_id
 INNER JOIN category ca ON fc.category_id = ca.category_id
-GROUP BY ca.name ORDER BY sum(p.amount) DESC;
+GROUP BY ca.name ORDER BY sum(p.amount) DESC LIMIT 5;
 -- How would you display the view
 SELECT * FROM genresByRevDesc;
 -- Drop the view
