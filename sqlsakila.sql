@@ -54,3 +54,59 @@ FROM payment p
 INNER JOIN customer c ON
 c.customer_id=p.customer_id 
 GROUP BY c.first_name,c.last_name  ORDER BY c.last_name asc;
+-- Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
+-- Use subqueries to display all actors who appear in the film Alone Trip
+-- You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers. Use joins to retrieve this information
+SELECT c.first_name, c.last_name, c.email, co.country
+FROM customer c 
+INNER JOIN address a ON a.address_id = c.address_id
+INNER JOIN city ci ON ci.city_id = a.city_id
+INNER JOIN country co ON ci.country_id = co.country_id
+WHERE co.country = "Canada";
+-- Sales have been lagging among young families, and you wish to target all family movies for a promotion. Identify all movies categorized as family films
+SELECT f.title
+FROM film f
+INNER JOIN film_category fc ON f.film_id = fc.film_id
+INNER JOIN category ca ON ca.category_id = fc.category_id
+WHERE ca.name = "Family";
+-- Display the most frequently rented movies in descending order.
+SELECT f.title
+FROM film f
+INNER JOIN inventory i ON f.film_id = i.film_id
+INNER JOIN rental r ON i.inventory_id = r.inventory_id
+ORDER BY i.inventory_id DESC
+-- Write a query to display how much business, in dollars, each store brought in.
+SELECT sum(p.amount)
+FROM payment p
+INNER JOIN rental r ON r.rental_id = p.rental_id
+INNER JOIN inventory i ON r.inventory_id = i.inventory_id
+INNER JOIN store s ON s.store_id = i.store_id
+GROUP BY s.store_id;
+-- Write a query to display for each store its store ID, city, and country.
+SELECT s.store_id, c.city,co.country
+FROM store s
+INNER JOIN address a ON a.address_id = s.address_id
+INNER JOIN city c ON a.city_id = c.city_id
+INNER JOIN country co ON c.country_id = co.country_id
+-- List the top five genres in gross revenue in descending order.
+SELECT sum(p.amount), ca.name
+FROM payment p
+INNER JOIN rental r ON r.rental_id = p.rental_id
+INNER JOIN inventory i ON r.inventory_id = i.inventory_id
+INNER JOIN film_category fc ON fc.film_id = i.film_id
+INNER JOIN category ca ON fc.category_id = ca.category_id
+GROUP BY ca.name ORDER BY sum(p.amount) DESC;
+-- Use the solution from the problem above to create a view.
+CREATE VIEW genresByRevDesc AS
+SELECT sum(p.amount), ca.name
+FROM payment p
+INNER JOIN rental r ON r.rental_id = p.rental_id
+INNER JOIN inventory i ON r.inventory_id = i.inventory_id
+INNER JOIN film_category fc ON fc.film_id = i.film_id
+INNER JOIN category ca ON fc.category_id = ca.category_id
+GROUP BY ca.name ORDER BY sum(p.amount) DESC;
+-- How would you display the view
+SELECT * FROM genresByRevDesc;
+-- Drop the view
+DROP VIEW genresByRevDesc;
+
