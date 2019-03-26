@@ -38,11 +38,12 @@ FROM payment p
 INNER JOIN staff s ON
 s.staff_id=p.staff_id
 WHERE p.payment_date BETWEEN '2005/08/01' AND '2005/08/31';
--- **List each film and the number of actors who are listed for that film. Use tables film_actor and film. Use inner join.
-SELECT f.title, fa.actor_id
+-- List each film and the number of actors who are listed for that film. Use tables film_actor and film. Use inner join.
+SELECT f.title, count(actor_id)
 FROM film f
 INNER JOIN film_actor fa ON
-f.film_id=fa.film_id;
+f.film_id=fa.film_id
+GROUP BY title;
 -- How many copies of the film Hunchback Impossible exist in the inventory system?
 SELECT f.title, count(i.inventory_id)
 FROM film f
@@ -55,7 +56,29 @@ INNER JOIN customer c ON
 c.customer_id=p.customer_id 
 GROUP BY c.first_name,c.last_name  ORDER BY c.last_name asc;
 -- Use subqueries to display the titles of movies starting with the letters K and Q whose language is English.
+SELECT title
+FROM film
+WHERE (title LIKE 'K%' OR title LIKE 'Q%')
+AND language_id IN (
+SELECT language_id
+FROM language
+WHERE name = 'English'
+);
 -- Use subqueries to display all actors who appear in the film Alone Trip
+SELECT actor_id, first_name, last_name
+FROM actor
+WHERE actor_id IN (
+
+   SELECT actor_id
+   FROM film_actor
+   WHERE film_id IN (
+
+       SELECT film_id
+       FROM film
+        WHERE title = 'Alone Trip'
+
+        )
+);
 -- You want to run an email marketing campaign in Canada, for which you will need the names and email addresses of all Canadian customers. Use joins to retrieve this information
 SELECT c.first_name, c.last_name, c.email, co.country
 FROM customer c 
